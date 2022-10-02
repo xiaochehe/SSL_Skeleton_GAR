@@ -1,0 +1,110 @@
+Experiment_name: ACMMM/ablation_epoch/AAGCM_150_volleyball
+# weights: ./work_dir/ACMMM/self_supervised/Contrastive_Volleyball/eval_results/pretrain_89-52380.pt
+
+# Contrastive_Volleyball/eval_results/pretrain_89-52380.pt
+# ignore-weights: fc_single_a.weight, fc_single_a.bias, fc_single_b.weight, fc_single_b.bias
+
+# feeder
+feeder: feeders.feeder.Feeder_Random
+train_feeder_args:
+  # data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/volleyball_selfsupervised/train_data.npy
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/volleyball_selfsupervised/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/volleyball_selfsupervised/train_label.pkl
+  debug: False
+  self_supervised: True
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+test_feeder_args:
+  self_supervised: True
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/volleyball_selfsupervised/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/volleyball_selfsupervised/val_label.pkl
+
+# model
+model: model.shift_gcn.Model
+model_args:
+  num_class: 8
+  num_point: 17
+  num_person: 12
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+
+#optim
+weight_decay: 0.0001
+base_lr: 0.1
+step: [83, 117, 133]
+
+# training
+device: 0
+only_train_epoch: 1
+batch_size: 16
+test_batch_size: 4
+num_epoch: 150
+nesterov: True
+
+# supervised parameters
+supervised_num_class: 8
+supervised_num_subclass: 10
+supervised_train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_label.pkl
+  debug: False
+  self_supervised: False
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+supervised_test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_label.pkl
+
+#optim
+supervised_weight_decay: 0.0001
+supervised_base_lr: 0.1
+supervised_step: [25, 35, 40]
+
+# training
+device: 0
+supervised_only_train_epoch: 1
+supervised_batch_size: 4
+supervised_test_batch_size: 4
+supervised_num_epoch: 45
+supervised_nesterov: True
+
+
+# supervised parameters
+supervised_num_class: 8
+supervised_num_subclass: 10
+finetune_train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_data_0.3.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_label_0.3.pkl
+  debug: False
+  self_supervised: False
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+finetune_test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_label.pkl
+
+#optim
+finetune_weight_decay: 0.0001
+finetune_base_lr: 0.1
+finetune_step: [25, 35, 40]
+
+# training
+device: 0
+finetune_only_train_epoch: 1
+finetune_batch_size: 16
+finetune_test_batch_size: 4
+finetune_num_epoch: 45
+finetune_nesterov: True

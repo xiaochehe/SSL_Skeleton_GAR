@@ -1,0 +1,43 @@
+# work_dir: collective_test
+Experiment_name: ACMMM/Collective_baseline
+# weights: ./addout-149-32700.pt
+
+# feeder
+feeder: feeders.feeder.Collective
+train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/train_label.pkl
+  debug: False
+  random_choose: False
+  random_shift: True
+  random_move: False
+  window_size: -1
+  normalization: False
+
+test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/val_label.pkl
+
+# model
+model: model.shift_gcn.Model
+model_args:
+  num_class: 4
+  # num_subclass: 7
+  num_point: 17
+  num_person: 12
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+
+#optim
+weight_decay: 0.0001
+base_lr: 0.01
+step: [60, 80]
+
+# training
+device: 0
+only_train_epoch: 1
+batch_size: 16
+test_batch_size: 16
+num_epoch: 90
+nesterov: True

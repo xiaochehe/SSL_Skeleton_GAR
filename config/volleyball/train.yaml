@@ -1,0 +1,45 @@
+# work_dir: volleyball_test_samllnet
+Experiment_name: ACMMM/visulization
+# weights: best_acc_model.pt
+weights: ./work_dir/ACMMM/ablation_depth/Volleyball_block158/best_acc_model.pt
+# weights: ./work_dir/ACMMM/aggregator/Volleyball_mean/best_acc_model.pt
+
+# feeder
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/train_label.pkl
+  debug: False
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/pivot_volleyball/val_label.pkl
+
+# model
+model: model.shift_gcn_visul.Model
+model_args:
+  num_class: 8
+  # num_subclass: 10
+  num_point: 17
+  num_person: 12
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+
+#optim
+weight_decay: 0.0001
+base_lr: 0.1
+step: [60, 80]
+
+# training
+device: 0
+only_train_epoch: 1
+batch_size: 16
+test_batch_size: 4
+num_epoch: 90
+nesterov: True

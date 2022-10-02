@@ -1,0 +1,75 @@
+work_dir: Volleyball_Visualization
+weights: best_acc_model.pt
+
+# feeder
+feeder: feeders.feeder.Feeder_Prediction_Collective
+train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective_selfsupervised/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective_selfsupervised/train_label.pkl
+  debug: False
+  self_supervised: True
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective_selfsupervised/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective_selfsupervised/val_label.pkl
+
+# model
+model: model.shift_gcn_endecoder.Model
+model_args:
+  num_class: 8
+  num_point: 17
+  num_person: 12
+  n_in_dec: 9
+  n_hid_dec: 256
+  graph: graph.ntu_rgb_d.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+
+#optim
+weight_decay: 0.0001
+base_lr: 0.1
+step: [60, 80]
+
+# training
+device: 0
+only_train_epoch: 1
+batch_size: 16
+test_batch_size: 16
+num_epoch: 90
+nesterov: True
+
+# supervised parameters
+supervised_num_class: 4
+supervised_num_subclass: 7
+supervised_train_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/train_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/train_label.pkl
+  debug: False
+  self_supervised: False
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: False
+
+supervised_test_feeder_args:
+  data_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/val_data.npy
+  label_path: /home/chehe/Experiments/groupActivity/Shift-GCN/data/collective/val_label.pkl
+
+#optim
+supervised_weight_decay: 0.0001
+supervised_base_lr: 0.1
+supervised_step: [25, 35, 40]
+
+# training
+device: 0
+supervised_only_train_epoch: 1
+supervised_batch_size: 16
+supervised_test_batch_size: 16
+supervised_num_epoch: 45
+supervised_nesterov: True
